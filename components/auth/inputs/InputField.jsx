@@ -11,8 +11,15 @@ const InputField = ({
   className = '',
 }) => {
   return (
-    <div className={`input-field ${className}`}>
-      {label && <label htmlFor={name}>{label}</label>}
+    <div className={`flex flex-col w-full mb-4 ${className}`}>
+      {label && (
+        <label
+          htmlFor={name}
+          className="mb-1 text-gray-700 dark:text-gray-300 font-medium"
+        >
+          {label}
+        </label>
+      )}
       <input
         id={name}
         name={name}
@@ -20,9 +27,13 @@ const InputField = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={error ? 'input-error' : ''}
+        className={`w-full px-4 py-2 rounded-lg border transition-colors duration-300
+          focus:outline-none focus:ring-2 focus:ring-blue-500
+          ${error ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}
+          dark:bg-gray-700 dark:text-white
+        `}
       />
-      {error && <p className="error-text">{error}</p>}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 };

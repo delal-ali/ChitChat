@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import ThemeToggle from "@/components/theme/ThemeToggle";
+
+import Link from "next/link";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
 import { TypewriterEffect } from "../ui/typewriter-effect";
 import HeroAnimation from "../cards/animation";
@@ -19,50 +19,33 @@ const title = [
 ];
 
 const Hero = () => {
-  const { theme } = useTheme();
-  const [bgGradient, setBgGradient] = useState(
-    "linear-gradient(-45deg, #dff6fb, #f3fafd, #ffffff, #f9fafb)"
-  );
-
-useEffect(() => {
-  if (theme === "dark") {
-    setBgGradient(`
-      linear-gradient(-45deg, #1e0f4f, #2c0857, #0f0a1a, #1a0b2a)
-    `);
-  } else {
-    setBgGradient(`
-      linear-gradient(-45deg, #dff6fb, #f3fafd, #ffffff, #f9fafb)
-    `);
-  }
-}, [theme]);
-
-
-  const textColor = theme === "dark" ? "text-white" : "text-gray-900";
+ 
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
       <div
         className="absolute inset-0 transition-all duration-700"
-        style={{ background: bgGradient }}
       />
 
       <div className="relative flex flex-col md:flex-row w-full h-full">
         <div className="relative w-full md:w-[65%] flex flex-col items-start justify-center p-10">
-          <div className="absolute top-4 right-4">
-            <ThemeToggle />
-          </div>
+         
 
           <TypewriterEffect
             words={title}
-            className={`text-4xl md:text-6xl font-bold transition-colors duration-500 ${textColor}`}
+            className={`text-4xl md:text-6xl font-bold transition-colors duration-500 `}
           />
-                <div className={`mt-6 text-1rem md:text-xl opacity-80 ${textColor}`}>
+                <div className={`mt-6 text-1rem md:text-xl opacity-80 `}>
             <TextGenerateEffect duration={30} filter={false} words={words} />
           </div>
          <div className="w-full flex justify-center md:justify-start">
-          <SubmitButton text="Get Started" className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300" />
-         </div>
-       
+       </div>
+        <Link href="/auth" passHref>
+              <SubmitButton
+                text="Get Started"
+                className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+              />
+            </Link>
         </div>
 
         <div className="w-full md:w-[35%] flex items-center justify-center px-100px md:p-10">

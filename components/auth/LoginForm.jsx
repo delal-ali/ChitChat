@@ -1,26 +1,19 @@
-// components/auth/LoginForm.jsx
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import InputField from './input/InputField';
-import PasswordField from './input/PasswordField';
-import SubmitButton from './SubmitButton';
-import SocialLogin from './SocialLogin';
-import { useLogin } from '../hooks/useLogin';
 
-export default function LoginForm({ apiEndpoint = '/api/auth/login' }) {
+import InputField from '@/components/auth/inputs/InputField';
+import PasswordField from '@/components/auth/inputs/PasswordField';
+import SubmitButton from '@/components/auth/SubmitButton';
+
+export default function LoginForm({ apiEndpoint = '/api/login' }) {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
-
-  const { login, loading, error } = useLogin({
-    apiEndpoint,
-    onSuccess: () => {
-      router.push('/dashboard');
-    },
-  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const validate = () => {
     const e = {};
@@ -37,51 +30,88 @@ export default function LoginForm({ apiEndpoint = '/api/auth/login' }) {
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setFieldErrors({});
+    setError('');
+
     if (!validate()) return;
 
-    const result = await login({ email, password });
-    
-    if (result?.ok) {
-      setEmail('');
-      setPassword('');
-      setFieldErrors({});
-    } else if (result?.aborted) {
-      
+    try {
+      setLoading(true);
+
+      const res = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
+       localStorage.setItem("token", data.token);
+       localStorage.setItem("user", JSON.stringify(data.user));
 
       
-    } else {
- 
+      router.push(`/chat/${data.user.id}`);
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      <InputField
-        label="Email"
-        name="email"
-        type="email"
-        placeholder="email@example.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        error={fieldErrors.email}
-      />
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <form
+        onSubmit={handleSubmit}
+        noValidate
+        className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6"
+      >
+        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
 
-      <PasswordField
-        label="Password"
-        name="password"
-        placeholder="Your password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        error={fieldErrors.password}
-      />
+        <InputField
+          label="Email"
+          name="email"
+          type="email"
+          placeholder="email@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={fieldErrors.email}
+        />
 
-      {error && <p role="alert">{error}</p>}
+        <PasswordField
+          label="Password"
+          name="password"
+          placeholder="Your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={fieldErrors.password}
+        />
 
-      <SubmitButton type="submit" disabled={loading} loading={loading}>
-        Log in
-      </SubmitButton>
+        {error && (
+          <p role="alert" className="text-red-500 text-sm text-center">
+            {error}
+          </p>
+        )}
 
-      <SocialLogin />
-    </form>
+        <SubmitButton
+          type="submit"
+          disabled={loading}
+          loading={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors"
+        >
+          Log in
+        </SubmitButton>
+
+        <p className="text-center text-gray-500 text-sm">
+          Don't have an account?{' '}
+          <a href="/signup" className="text-blue-600 hover:underline">
+            Sign up
+          </a>
+        </p>
+      </form>
+    </div>
   );
 }

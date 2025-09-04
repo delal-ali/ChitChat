@@ -1,7 +1,6 @@
-
 import { useState, useRef, useEffect } from 'react';
 
-export function useRegister({ apiEndpoint = '/api/auth/register', onSuccess } = {}) {
+export function useRegister({ apiEndpoint = '/api/signup', onSuccess } = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const abortRef = useRef(null);
@@ -21,10 +20,14 @@ export function useRegister({ apiEndpoint = '/api/auth/register', onSuccess } = 
         signal: controller.signal,
       });
       const data = await res.json();
+
       if (!res.ok) {
-        setError(data?.message || 'Registration failed');
+        // backend sends errors in `error` key
+        setError(data?.error || 'Registration failed');
         return { ok: false, data };
       }
+
+      // success response contains user object
       if (onSuccess) onSuccess(data);
       return { ok: true, data };
     } catch (err) {
