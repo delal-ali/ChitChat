@@ -1,12 +1,17 @@
 "use client";
+
 import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { FAQ } from "@/components/LandingPage/FAQ"; // if you want to import FAQ
 
 export function Features() {
   return (
-    <div className='mt-0 my-0'>
-    <div className="max-w-5xl mx-auto px-8">
-      <HoverEffect items={features} />
-    </div>
+    <div className="mt-0 my-0">
+      <div className="max-w-5xl mx-auto px-8">
+        <HoverEffect items={features} />
+      </div>
+      <div className='mx-0'>
+        <FAQ />
+      </div>
     </div>
   );
 }
