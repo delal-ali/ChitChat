@@ -30,7 +30,7 @@ export default function Home() {
       <FloatingNavDemo />
     
 
-      <div className="relative w-full min-h-screen">
+      <div className="relative w-full h-screen">
         {/* Background gradient */}
         <div
           className="absolute inset-0 -z-10 transition-all duration-700"

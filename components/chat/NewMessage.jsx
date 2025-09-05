@@ -38,10 +38,8 @@ export const NewMessage = ({ token, onConversationCreated }) => {
         return;
       }
 
-      // Notify parent (Sidebar) that a new conversation exists
       onConversationCreated?.(data.receiver.id);
 
-      // Clear input
       setUsername("");
       setContent("");
       setOpen(false);
@@ -65,7 +63,7 @@ export const NewMessage = ({ token, onConversationCreated }) => {
 
       {/* Collapsible form */}
       {open && (
-        <div className="absolute left-full ml-2 w-64 bg-gray-800 text-white p-4 rounded-lg shadow-lg z-50">
+        <div className="absolute bottom-12 left-0 w-72 sm:w-60 bg-gray-800 text-white p-4 rounded-lg shadow-lg">
           <h3 className="text-sm font-semibold mb-2">New Message</h3>
           <form onSubmit={handleSend} className="flex flex-col space-y-2">
             <input
@@ -96,3 +94,4 @@ export const NewMessage = ({ token, onConversationCreated }) => {
     </div>
   );
 };
+
