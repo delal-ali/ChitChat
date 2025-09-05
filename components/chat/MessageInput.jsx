@@ -33,7 +33,7 @@ export const MessageInput = ({ onSend, onUpload }) => {
             : "bg-gray-400 cursor-not-allowed"
         }`}
       >
-         <Send className="w-5 h-5 rotate-45" />
+        <Send className="w-5 h-5 rotate-45" />
       </button>
     </div>
   );

@@ -1,38 +1,38 @@
-'use client';
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import InputField from '@/components/auth/inputs/InputField';
-import PasswordField from '@/components/auth/inputs/PasswordField';
-import SubmitButton from '@/components/auth/SubmitButton';
+import InputField from "@/components/auth/inputs/InputField";
+import PasswordField from "@/components/auth/inputs/PasswordField";
+import SubmitButton from "@/components/auth/SubmitButton";
 
-export default function SignupForm({ apiEndpoint = '/api/signup' }) {
+export default function SignupForm({ apiEndpoint = "/api/signup" }) {
   const router = useRouter();
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const validate = () => {
     const e = {};
-    if (!username) e.username = 'Username is required';
+    if (!username) e.username = "Username is required";
 
-    if (!email) e.email = 'Email is required';
-    else if (!/^\S+@\S+\.\S+$/.test(email)) e.email = 'Enter a valid email';
+    if (!email) e.email = "Email is required";
+    else if (!/^\S+@\S+\.\S+$/.test(email)) e.email = "Enter a valid email";
 
-    if (!password) e.password = 'Password is required';
-    else if (password.length < 6) e.password = 'At least 6 characters';
+    if (!password) e.password = "Password is required";
+    else if (password.length < 6) e.password = "At least 6 characters";
 
     if (password !== confirmPassword)
-      e.confirmPassword = 'Passwords must match';
+      e.confirmPassword = "Passwords must match";
 
-    if (!acceptedTerms) e.terms = 'You must accept the terms';
+    if (!acceptedTerms) e.terms = "You must accept the terms";
 
     setFieldErrors(e);
     return Object.keys(e).length === 0;
@@ -41,7 +41,7 @@ export default function SignupForm({ apiEndpoint = '/api/signup' }) {
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setFieldErrors({});
-    setError('');
+    setError("");
 
     if (!validate()) return;
 
@@ -49,42 +49,41 @@ export default function SignupForm({ apiEndpoint = '/api/signup' }) {
       setLoading(true);
 
       const res = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Signup failed');
+        setError(data.error || "Signup failed");
         return;
       }
 
-      
-      setUsername('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
       setAcceptedTerms(false);
       setFieldErrors({});
 
-      router.push('/login');
+      router.push("/login");
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center bg-black-100 px-4">
+    <div className="flex items-center justify-center bg-black-100 px-4 sm:px-6 md:px-8 min-h-screen">
       <form
         onSubmit={handleSubmit}
         noValidate
-        className="bg-pink-200 p-8 rounded-xl shadow-lg w-xl space-y-6 h-200px"
+        className="bg-pink-200 p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl space-y-6"
       >
-              <h2 className="text-3xl text-pink-600 font-extrabold text-center">
+        <h2 className="text-2xl sm:text-3xl text-pink-600 font-extrabold text-center">
           Sign Up
         </h2>
 
@@ -145,13 +144,12 @@ export default function SignupForm({ apiEndpoint = '/api/signup' }) {
         <SubmitButton
           loading={loading}
           disabled={loading}
-          className="w-3xs mt-2 ml-30 bg-pink-600  hover:bg-pink-500 text-white py-2 px-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
-
+          className="w-full sm:w-3xs mt-2 bg-pink-600 hover:bg-pink-500 text-white py-2 px-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
         >
           Sign Up
         </SubmitButton>
 
-        <p className="text-center text-gray-500 text-sm">
+        <p className="text-center text-gray-500 text-sm sm:text-base">
           Already have an account?{" "}
           <a href="/login" className="text-blue-600 hover:underline">
             Log in

@@ -2,7 +2,13 @@
 import { useState, useEffect } from "react";
 import { NewMessage } from "./NewMessage";
 
-export const Sidebar = ({ userId, token, user, activeConversation, onSelectConversation }) => {
+export const Sidebar = ({
+  userId,
+  token,
+  user,
+  activeConversation,
+  onSelectConversation,
+}) => {
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +26,9 @@ export const Sidebar = ({ userId, token, user, activeConversation, onSelectConve
 
         const grouped = messages.reduce((acc, msg) => {
           const otherUser =
-            msg.senderId === userId ? msg.receiver.username : msg.sender.username;
+            msg.senderId === userId
+              ? msg.receiver.username
+              : msg.sender.username;
           if (!acc[otherUser]) {
             acc[otherUser] = [];
           }
@@ -28,7 +36,7 @@ export const Sidebar = ({ userId, token, user, activeConversation, onSelectConve
           return acc;
         }, {});
 
-        const conversationList = Object.keys(grouped).map((otherUser) => {
+        let conversationList = Object.keys(grouped).map((otherUser) => {
           const msgs = grouped[otherUser];
           const latestMessage = msgs.sort(
             (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
@@ -39,6 +47,11 @@ export const Sidebar = ({ userId, token, user, activeConversation, onSelectConve
             timestamp: latestMessage.timestamp,
           };
         });
+
+        // ✅ sort conversations by latest timestamp (newest first)
+        conversationList = conversationList.sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+        );
 
         setConversations(conversationList);
       } catch (err) {
@@ -54,7 +67,9 @@ export const Sidebar = ({ userId, token, user, activeConversation, onSelectConve
   return (
     <div className="w-64 bg-gray-800 h-full p-4 overflow-y-auto flex flex-col">
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-white">Welcome, {user?.username}</h2>
+        <h2 className="text-lg font-semibold text-white">
+          Welcome, {user?.username}
+        </h2>
       </div>
       <div className="flex-1">
         {loading && <p className="text-gray-400">Loading conversations...</p>}
@@ -80,7 +95,10 @@ export const Sidebar = ({ userId, token, user, activeConversation, onSelectConve
         ))}
       </div>
       <div className="mt-4">
-        <NewMessage token={token} onConversationCreated={onSelectConversation} />
+        <NewMessage
+          token={token}
+          onConversationCreated={onSelectConversation}
+        />
       </div>
     </div>
   );

@@ -81,16 +81,16 @@ export const ChatWindow = ({ receiverId, userId, token }) => {
 
   if (!receiverId) {
     return (
-      <div className="flex-1 h-full flex items-center justify-center text-gray-400">
+      <div className="flex-1 h-full flex items-center justify-center text-gray-400 text-center px-4 sm:px-6">
         Select a chat to start messaging
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-800 h-full">
+    <div className="flex-1 flex flex-col bg-gray-800 h-full w-full max-w-full">
       <ChatHeader
-        className="min-h-[48px] p-4"
+        className="min-h-[48px] p-2 sm:p-3 md:p-4"
         avatar="/default-avatar.png"
         name={receiverId}
         subtitle="Online"
@@ -98,14 +98,24 @@ export const ChatWindow = ({ receiverId, userId, token }) => {
       />
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-2"
-        style={{ maxHeight: "calc(100vh - 112px)" }} 
+        className="flex-1 overflow-y-auto p-2 sm:p-3 md:p-4 space-y-2"
+        style={{ maxHeight: "calc(100vh - 112px)" }}
       >
         <>
-          {loading && <p className="text-gray-400">Loading messages...</p>}
-          {error && <p className="text-red-400">{error}</p>}
+          {loading && (
+            <p className="text-gray-400 text-xs sm:text-sm md:text-base">
+              Loading messages...
+            </p>
+          )}
+          {error && (
+            <p className="text-red-400 text-xs sm:text-sm md:text-base">
+              {error}
+            </p>
+          )}
           {messages.length === 0 && !loading && !error && (
-            <p className="text-gray-400">No messages yet</p>
+            <p className="text-gray-400 text-xs sm:text-sm md:text-base">
+              No messages yet
+            </p>
           )}
           {messages.map((msg) =>
             msg.senderId === userId ? (
@@ -133,7 +143,7 @@ export const ChatWindow = ({ receiverId, userId, token }) => {
           )}
         </>
       </div>
-      <div className="p-4 border-t border-gray-700 bg-gray-800 sticky bottom-0">
+      <div className="p-2 sm:p-3 md:p-4 border-t border-gray-700 bg-gray-800 sticky bottom-0 w-full">
         <MessageInput onSend={sendMessage} />
       </div>
     </div>
