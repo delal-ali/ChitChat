@@ -129,7 +129,7 @@ yarn test
 
 - Delal Mohammed – Full-stack Developer & UI Designer
 - Afomiya Antehunegne - Backend Dev
--Yohannes Desalegn-Full-stack Developer & UI Designer
+- Yohannes Desalegn-Full-stack Developer & UI Designer
 
 ---
 
@@ -137,7 +137,11 @@ yarn test
 
 https://democreator.wondershare.com/app/preview?id=83a6257d-7b9b-476d-913d-fd559d86c67e
 
+🚀 Hosted on Vercel
+You can try out ChitChat here: [https://chitchat.vercel.app](https://chit-chat-five-lime.vercel.app/
+)
 
+  
  🙏 Acknowledgments
 
 - Built with ❤️ using Next.js, Prisma, and Tailwind CSS
